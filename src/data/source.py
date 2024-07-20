@@ -51,7 +51,7 @@ class Source:
     def __persist(self, data: datasets.DatasetDict):
         """
 
-        :param data:
+        :param data: The data set being saved.
         :return:
         """
 
