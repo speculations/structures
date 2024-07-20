@@ -1,6 +1,6 @@
 <br>
 
-**Sectioning**
+**Structures**
 
 <br>
 <br>
