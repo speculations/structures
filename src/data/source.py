@@ -9,10 +9,14 @@ class Source:
     Retrieves and prepares the California Bills documents/data
     """
 
-    def __init__(self):
+    def __init__(self, warehouse: str):
         """
-        Constructor
+
+        :param warehouse: The temporary local directory where data sets are initially placed,
+                          prior to transfer to Amazon S3 (Simple Storage Service)
         """
+
+        self.__warehouse = warehouse
 
         # Logging
         logging.basicConfig(level=logging.INFO,
@@ -44,7 +48,16 @@ class Source:
 
         return dataset
 
-    def exc(self) -> datasets.DatasetDict:
+    def __persist(self, data: datasets.DatasetDict):
+        """
+
+        :param data:
+        :return:
+        """
+
+        data.save_to_disk(dataset_dict_path=self.__warehouse)
+
+    def exc(self) -> None:
         """
 
         :return:
@@ -58,4 +71,5 @@ class Source:
         self.__logger.info('Validate Set:\n%s', data['validate'].shape)
         self.__logger.info('Test Set:\n%s', data['test'].shape)
 
-        return data
+        # Save
+        self.__persist(data=data)
