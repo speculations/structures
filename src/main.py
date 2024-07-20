@@ -3,8 +3,6 @@ import logging
 import os
 import sys
 
-import datasets
-
 
 def main() -> None:
     """
@@ -17,11 +15,12 @@ def main() -> None:
     logger: logging.Logger = logging.getLogger(__name__)
 
     # Set up
-    src.setup.Setup().exc()
+    src.setup.Setup(
+        warehouse=configurations.warehouse).exc()
 
     # Explorations
-    source: datasets.DatasetDict = src.data.source.Source().exc()
-
+    src.data.source.Source(
+        warehouse=configurations.warehouse).exc()
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
@@ -40,8 +39,11 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
+    import config
     import src.functions.cache
     import src.data.source
     import src.setup
+
+    configurations = config.Config()
 
     main()
