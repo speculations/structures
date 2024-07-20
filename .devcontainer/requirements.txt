@@ -5,7 +5,7 @@ pydot
 boto3
 botocore
 s3fs>=2024
-datasets
+datasets>=2.18
 pandas>=2.2
 numpy>=1.26
 scipy>=1.13
