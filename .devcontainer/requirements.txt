@@ -1,7 +1,10 @@
-accelerate>=0.31
 dask[complete]>=2024.5
+dask-expr
 graphviz
 pydot
+boto3
+botocore
+s3fs>=2024
 datasets
 pandas>=2.2
 numpy>=1.26
