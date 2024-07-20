@@ -18,24 +18,14 @@ class Source:
 
         self.__warehouse = warehouse
 
-        # The Data: Herein, the dictionary segments are being reset such that
-        # the segments are <training>, <validate>, and <test>; initially <training>,
-        # <test>, and <ca_test>, respectively.
-        self.__dataset: datasets.DatasetDict = datasets.load_dataset('billsum')
-        validate = self.__dataset.pop('test')
-        test = self.__dataset.pop('ca_test')
-
-        # Hence
-        self.__dataset['validate'] = validate
-        self.__dataset['test'] = test
-
         # Logging
         logging.basicConfig(level=logging.INFO,
                             format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.__logger = logging.getLogger(__name__)
 
-    def __data(self) -> datasets.DatasetDict:
+    @staticmethod
+    def __data() -> datasets.DatasetDict:
         """
 
         :return:
@@ -56,8 +46,6 @@ class Source:
         dataset['validate'] = validate
         dataset['test'] = test
 
-        self.__logger.info(dataset.keys())
-
         return dataset
 
     def __persist(self, data: datasets.DatasetDict):
@@ -75,13 +63,13 @@ class Source:
         :return:
         """
 
-        # data = self.__data()
+        data = self.__data()
 
         # The data segments
-        self.__logger.info('The data segments:\n%s', self.__dataset.keys())
-        self.__logger.info('Training Set:\n%s', self.__dataset['train'].shape)
-        self.__logger.info('Validate Set:\n%s', self.__dataset['validate'].shape)
-        self.__logger.info('Test Set:\n%s', self.__dataset['test'].shape)
+        self.__logger.info('The data segments:\n%s', data.keys())
+        self.__logger.info('Training Set:\n%s', data['train'].shape)
+        self.__logger.info('Validate Set:\n%s', data['validate'].shape)
+        self.__logger.info('Test Set:\n%s', data['test'].shape)
 
         # Save
-        self.__persist(data=self.__dataset)
+        self.__persist(data=data)
