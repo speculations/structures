@@ -9,7 +9,8 @@ RUN pip install --upgrade pip
 WORKDIR /app
 
 COPY /.devcontainer/requirements.txt /app
-RUN apt -y install graphviz && pip install --requirement /app/requirements.txt --no-cache-dir
+RUN apt update && apt -q -y upgrade && apt -y install sudo && sudo apt -y install graphviz && \
+    pip install --requirement /app/requirements.txt --no-cache-dir
 
 # Port
 EXPOSE 8050
