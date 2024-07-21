@@ -17,13 +17,13 @@ def main() -> None:
     logger.info(s3_parameters)
 
     # Set up
-    # setup = src.setup.Setup(service=service, s3_parameters=s3_parameters,
-    #     warehouse=configurations.warehouse).exc()
+    setup = src.setup.Setup(service=service, s3_parameters=s3_parameters,
+        warehouse=configurations.warehouse).exc()
 
     # Explorations
-    # if setup:
-    #     src.data.source.Source(
-    #         warehouse=configurations.warehouse).exc()
+    if setup:
+        src.data.source.Source(
+            warehouse=configurations.warehouse).exc()
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
