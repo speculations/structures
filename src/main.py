@@ -2,6 +2,7 @@
 import logging
 import os
 import sys
+import subprocess
 
 
 def main() -> None:
@@ -13,14 +14,16 @@ def main() -> None:
     """
 
     logger: logging.Logger = logging.getLogger(__name__)
+    logger.info(s3_parameters)
 
     # Set up
-    src.setup.Setup(
-        warehouse=configurations.warehouse).exc()
+    # setup = src.setup.Setup(service=service, s3_parameters=s3_parameters,
+    #     warehouse=configurations.warehouse).exc()
 
     # Explorations
-    src.data.source.Source(
-        warehouse=configurations.warehouse).exc()
+    # if setup:
+    #     src.data.source.Source(
+    #         warehouse=configurations.warehouse).exc()
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
@@ -40,10 +43,20 @@ if __name__ == '__main__':
 
     # Modules
     import config
-    import src.functions.cache
     import src.data.source
+    import src.elements.s3_parameters as s3p
+    import src.elements.service as sr
+
+    import src.functions.cache
+    import src.functions.service
+    import src.s3.s3_parameters
     import src.setup
 
+    # Configurations
     configurations = config.Config()
+
+    # S3 S3Parameters, Service Instance
+    s3_parameters: s3p.S3Parameters = src.s3.s3_parameters.S3Parameters().exc()
+    service: sr.Service = src.functions.service.Service(region_name=s3_parameters.region_name).exc()
 
     main()
