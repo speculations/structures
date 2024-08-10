@@ -2,7 +2,6 @@
 import glob
 import logging
 import os
-import pathlib
 
 import numpy as np
 import pandas as pd
@@ -50,7 +49,8 @@ class Dictionary:
 
         return pd.DataFrame.from_records(details)
 
-    def __metadata(self) -> dict:
+    @staticmethod
+    def __metadata() -> dict:
         """
 
         :return:
