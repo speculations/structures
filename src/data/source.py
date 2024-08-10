@@ -3,13 +3,16 @@ import logging
 
 import datasets
 
+import src.data.dictionary
+import src.elements.s3_parameters as s3p
+
 
 class Source:
     """
     Retrieves and prepares the California Bills documents/data
     """
 
-    def __init__(self, warehouse: str):
+    def __init__(self, warehouse: str, s3_parameters: s3p):
         """
 
         :param warehouse: The temporary local directory where data sets are initially placed,
@@ -17,6 +20,7 @@ class Source:
         """
 
         self.__warehouse = warehouse
+        self.__s3_parameters = s3_parameters
 
         # Logging
         logging.basicConfig(level=logging.INFO,
@@ -56,6 +60,11 @@ class Source:
         """
 
         data.save_to_disk(dataset_dict_path=self.__warehouse)
+
+    def __transfer(self):
+
+        dictionary = src.data.dictionary.Dictionary()
+        dictionary.exc(path=self.__warehouse, extension='*', prefix=self.__s3_parameters.path_internal_splits)
 
     def exc(self) -> None:
         """
