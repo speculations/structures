@@ -4,6 +4,7 @@ import logging
 import os
 import pathlib
 
+import numpy as np
 import pandas as pd
 
 import src.functions.objects
@@ -68,12 +69,11 @@ class Dictionary:
         """
 
         local: pd.DataFrame = self.__local(path=path, extension=extension)
-        # metadata: pd.DataFrame = self.__metadata(path=path, vertices=local['vertex'].tolist())
-        # frame = local.copy().merge(metadata, how='left', on='vertex')
 
         # Building the Amazon S3 strings
-
         frame = local.assign(key=prefix + local["vertex"])
-        # frame[['file', 'key', 'metadata']]
 
-        return frame
+        # The metadata dict strings
+        frame['metadata'] = np.array(self.__metadata()).repeat(frame.shape[0])
+
+        return frame[['file', 'key', 'metadata']]
