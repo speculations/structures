@@ -5,6 +5,8 @@ import datasets
 
 import src.data.dictionary
 import src.elements.s3_parameters as s3p
+import src.elements.service as sr
+import src.s3.ingress
 
 
 class Source:
@@ -12,15 +14,21 @@ class Source:
     Retrieves and prepares the California Bills documents/data
     """
 
-    def __init__(self, warehouse: str, s3_parameters: s3p):
+    def __init__(self, service: sr.Service,  s3_parameters: s3p, warehouse: str):
         """
 
+        :param service: A suite of services for interacting with Amazon Web Services.
+        :param s3_parameters:
         :param warehouse: The temporary local directory where data sets are initially placed,
                           prior to transfer to Amazon S3 (Simple Storage Service)
         """
 
-        self.__warehouse = warehouse
-        self.__s3_parameters = s3_parameters
+        self.__service: sr.Service = service
+        self.__s3_parameters: s3p.S3Parameters = s3_parameters
+        self.__warehouse: str = warehouse
+
+        # Instances
+        self.__dictionary = src.data.dictionary.Dictionary()
 
         # Logging
         logging.basicConfig(level=logging.INFO,
@@ -62,9 +70,7 @@ class Source:
         data.save_to_disk(dataset_dict_path=self.__warehouse)
 
     def __transfer(self):
-
-        dictionary = src.data.dictionary.Dictionary()
-        dictionary.exc(path=self.__warehouse, extension='*', prefix=self.__s3_parameters.path_internal_splits)
+        pass
 
     def exc(self) -> None:
         """
@@ -82,3 +88,10 @@ class Source:
 
         # Save
         self.__persist(data=data)
+
+        # Inventory
+        strings = self.__dictionary.exc(
+            path=self.__warehouse, extension='*', prefix=self.__s3_parameters.path_internal_splits)
+
+        messages = src.s3.ingress.Ingress(
+            service=self.__service, bucket_name=self.__s3_parameters.internal).exc(strings=strings)
