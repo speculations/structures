@@ -6,8 +6,6 @@ import os
 import numpy as np
 import pandas as pd
 
-import src.functions.objects
-
 
 class Dictionary:
     """
@@ -18,8 +16,6 @@ class Dictionary:
         """
         Constructor
         """
-
-        self.__objects = src.functions.objects.Objects()
 
         # Logging
         logging.basicConfig(level=logging.INFO,
