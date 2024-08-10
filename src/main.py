@@ -18,6 +18,7 @@ def main() -> None:
     # Set up
     setup = src.setup.Setup(service=service, s3_parameters=s3_parameters,
         warehouse=configurations.warehouse).exc()
+    logger.info(setup)
 
     # Get
     if setup:
