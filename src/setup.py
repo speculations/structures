@@ -60,4 +60,4 @@ class Setup:
         :return:
         """
 
-        return self.__local() & self.__s3()
+        return self.__s3() & self.__local()
