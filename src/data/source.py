@@ -18,7 +18,8 @@ class Source:
         """
 
         :param service: A suite of services for interacting with Amazon Web Services.
-        :param s3_parameters:
+        :param s3_parameters: The overarching S3 parameters settings of this
+                              project, e.g., region code name, buckets, etc.
         :param warehouse: The temporary local directory where data sets are initially placed,
                           prior to transfer to Amazon S3 (Simple Storage Service)
         """
@@ -68,9 +69,6 @@ class Source:
         """
 
         data.save_to_disk(dataset_dict_path=self.__warehouse)
-
-    def __transfer(self):
-        pass
 
     def exc(self) -> None:
         """
