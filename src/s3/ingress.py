@@ -1,5 +1,4 @@
 """Module ingress.py"""
-import logging
 import urllib.parse
 
 import botocore.exceptions
@@ -29,12 +28,6 @@ class Ingress:
         self.__s3_client = service.s3_client
         self.__bucket_name = bucket_name
 
-        # Logging
-        logging.basicConfig(level=logging.INFO,
-                            format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
-                            datefmt='%Y-%m-%d %H:%M:%S')
-        self.__logger = logging.getLogger(__name__)
-
     @dask.delayed
     def __ingress(self, file: str, key: str, metadata: dict) -> str:
         """
@@ -50,7 +43,8 @@ class Ingress:
         :return:
         """
 
-        tags = {key: value for key, value in metadata.items()}
+        # Either tags = {key: value for key, value in metadata.items()}, or
+        tags = dict(metadata.items())
         tagging = urllib.parse.urlencode(tags)
 
         try:
