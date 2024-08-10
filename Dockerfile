@@ -9,8 +9,8 @@ ARG UID=$GID
 # file of each step separately; and RUN the file immediately after COPY
 WORKDIR /app
 COPY .devcontainer/requirements.txt /app
-RUN groupadd --system readers --gid $GID && \
-    useradd --system automata --uid $UID --gid $GID && \
+RUN groupadd --system automata --gid $GID && \
+    useradd --system automaton --uid $UID --gid $GID && \
     apt update && apt -q -y upgrade && apt -y install sudo && sudo apt -y install graphviz && \
     pip install --upgrade pip && \
     pip install --requirement /app/requirements.txt --no-cache-dir
@@ -23,7 +23,7 @@ COPY config.py /app/config.py
 EXPOSE 8050
 
 # Reader
-USER automata
+USER automaton
 
 # ENTRYPOINT
 ENTRYPOINT ["python"]
