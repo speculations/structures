@@ -70,7 +70,7 @@ class Source:
 
         data.save_to_disk(dataset_dict_path=self.__warehouse)
 
-    def exc(self) -> None:
+    def exc(self) -> list[str]:
         """
 
         :return:
@@ -87,9 +87,12 @@ class Source:
         # Save
         self.__persist(data=data)
 
-        # Inventory
+        # Inventory of data files
         strings = self.__dictionary.exc(
             path=self.__warehouse, extension='*', prefix=self.__s3_parameters.path_internal_splits)
 
+        # Transfer
         messages = src.s3.ingress.Ingress(
             service=self.__service, bucket_name=self.__s3_parameters.internal).exc(strings=strings)
+
+        return messages
