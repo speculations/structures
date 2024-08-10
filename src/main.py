@@ -19,10 +19,12 @@ def main() -> None:
     setup = src.setup.Setup(service=service, s3_parameters=s3_parameters,
         warehouse=configurations.warehouse).exc()
 
-    # Explorations
+    # Get
     if setup:
         src.data.source.Source(
             warehouse=configurations.warehouse).exc()
+
+    # Transfer
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
