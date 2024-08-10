@@ -21,9 +21,9 @@ def main() -> None:
 
     # Get
     if setup:
-        src.data.source.Source(
+        messages = src.data.source.Source(service=service, s3_parameters=s3_parameters,
             warehouse=configurations.warehouse).exc()
-
+        logger.info(messages)
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
