@@ -3,6 +3,7 @@ import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.functions.directories
 import src.s3.bucket
+import src.s3.keys
 
 
 class Setup:
@@ -39,7 +40,11 @@ class Setup:
                                       bucket_name=self.__s3_parameters.internal)
 
         if bucket.exists():
-            return bucket.empty()
+
+            temporary = src.s3.keys.Keys(
+                service=self.__service, bucket_name=self.__s3_parameters.internal).all()
+            
+            return bucket.empty() if temporary else True
 
         return bucket.create()
 
