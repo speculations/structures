@@ -24,8 +24,6 @@ def main() -> None:
         src.data.source.Source(
             warehouse=configurations.warehouse).exc()
 
-    # Transfer
-
     # Delete Cache Points
     src.functions.cache.Cache().exc()
 
@@ -45,6 +43,7 @@ if __name__ == '__main__':
     # Modules
     import config
     import src.data.source
+    import src.data.dictionary
     import src.elements.s3_parameters as s3p
     import src.elements.service as sr
 
