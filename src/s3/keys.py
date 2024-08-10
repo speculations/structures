@@ -1,7 +1,6 @@
 """
 Module keys.py
 """
-import logging
 import boto3
 import botocore.exceptions
 
@@ -29,12 +28,6 @@ class Keys:
         self.__s3_resource: boto3.session.Session.resource = service.s3_resource
         self.__s3_client = service.s3_client
         self.__bucket = self.__s3_resource.Bucket(name=self.__bucket_name)
-
-        # Logging
-        logging.basicConfig(level=logging.INFO,
-                            format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
-                            datefmt='%Y-%m-%d %H:%M:%S')
-        self.__logger = logging.getLogger(__name__)
 
     def excerpt(self, prefix: str) -> list[str]:
         """
