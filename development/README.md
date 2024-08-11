@@ -129,7 +129,7 @@ inspects complexity.
 We may deliver assets to GitHub Container Registry (GCR) and/or Amazon ECR (Elastic Container Registry).  **If you do not have an Amazon account and/or** you have not set up the GitHub Secrets
 
 * AWS_ENTRY
-* AWS_ARN_ECR_ACTIONS: Amazon ECR & GitHub Actions interaction role
+* AWS_ARN_ECR_ACTIONS: Amazon ECR & GitHub Actions interaction role.  Ensure the trust policy of the role refers to this repository's GitHub Organization.
 * AWS_REGION: region code
 * ECR_REPOSITORY: The name of the Amazon ECR repository that assets will be delivered to.
 
