@@ -48,10 +48,18 @@ IntelliJ IDEA:
 
 Similarly, Visual Studio Code as its container attachment instructions; study [Attach Container](https://code.visualstudio.com/docs/devcontainers/attach-container).
 
+
+<br>
 <br>
 
 
-## Development Notes
+## Code Analysis
+
+The GitHub Actions script [main.yml](../.github/workflows/main.yml) conducts code analysis within a Cloud GitHub Workspace.  Depending on the script, code analysis may occur `on push` to any repository branch, or `on push` to a specific branch.
+
+The sections herein outline remote code analysis.
+
+### pylint
 
 The directive
 
@@ -59,28 +67,88 @@ The directive
 pylint --generate-rcfile > .pylintrc
 ```
 
-generates the dotfile `.pylintrc` of the static code analyser [pylint](https://pylint.pycqa.org/en/latest/user_guide/checkers/features.html).  Subsequently, analyse via
+generates the dotfile `.pylintrc` of the static code analyser [pylint](https://pylint.pycqa.org/en/latest/user_guide/checkers/features.html).  Subsequently, analyse a directory via the command
 
 ```shell
-python -m pylint --rcfile .pylintrc ...
+python -m pylint --rcfile .pylintrc {directory}
 ```
 
+The `.pylintrc` file of this template project has been **amended to adhere to team norms**, including
 
+* Maximum number of characters on a single line.
+  > max-line-length=127
+
+* Maximum number of lines in a module.
+  > max-module-lines=135
+
+
+<br>
+
+
+### pytest & pytest coverage
+
+> [!IMPORTANT]
+> Within main.yml, enable pytest & pytest coverage via patterns akin to
+>
+> * pytest -o python_files=test_*
+> * pytest --cov-report term-missing  --cov src/data/... tests/data/...
+>
+
+Within a remote environment conduct apply/conduct a pytest via
+
+```shell
+python -m pytest ...
+```
+
+Replace the ellipses with, e.g., a file name.
 
 <br>
 <br>
 
-<br>
-<br>
+### flake8
+
+For code & complexity analysis.  A directive of the form
+
+```bash
+python -m flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/data
+```
+
+inspects issues in relation to logic (F7), syntax (Python E9, Flake F7), mathematical formulae symbols (F63), undefined variable names (F82).  Additionally
+
+```shell
+python -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/data
+```
+
+inspects complexity.
 
 <br>
 <br>
 
-<br>
-<br>
+## Delivering Assets
 
+We may deliver assets to GitHub Container Registry (GCR) and/or Amazon ECR (Elastic Container Registry).  **If you do not have an Amazon account and/or** you have not set up the GitHub Secrets
 
+* AWS_ENTRY
+* AWS_ARN_ECR_ACTIONS: Amazon ECR & GitHub Actions interaction role
+* AWS_REGION: region code
+* ECR_REPOSITORY: The name of the Amazon ECR repository that assets will be delivered to.
 
+that enable delivery to Amazon ECR via the directive
+
+```yaml
+  with:
+    role-to-assume: arn:aws:iam::${{ secrets.AWS_ENTRY }}:role/${{ secrets.AWS_ARN_ECR_ACTIONS }}
+    aws-region: ${{ secrets.AWS_REGION }}
+```
+
+then set the `ecr` section of [main.yml](../.github/workflows/main.yml) to *false*, i.e.,
+
+```yaml
+  ecr:
+    name: Amazon Elastic Container Registry
+    needs: build
+    if: ${{ false }}
+```
 
 <br>
 <br>
