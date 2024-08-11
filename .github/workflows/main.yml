@@ -118,6 +118,7 @@ jobs:
   packages:
     name: GitHub Packages Container Registry
     needs: build
+    if: ${{ false }}
     runs-on: ubuntu-latest
 
     permissions:
